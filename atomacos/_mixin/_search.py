@@ -1,3 +1,4 @@
+import atomacos
 from atomacos import AXCallbacks
 
 
@@ -7,10 +8,12 @@ class SearchMethodsMixin(object):
         if target is None:
             target = self
 
-        if "AXChildren" not in target.ax_attributes:
+        try:
+            children = target.AXChildren
+        except (AttributeError, atomacos.Error):
             return
 
-        for child in target.AXChildren:
+        for child in children:
             yield child
             if recursive:
                 for c in self._generateChildren(child, recursive):
